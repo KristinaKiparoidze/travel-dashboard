@@ -5,9 +5,9 @@ export function filterVisited<T extends { visited: boolean }>(
   filter: VisitFilter
 ): T[] {
   switch (filter) {
-    case VisitFilter.YES:
+    case VisitFilter.VISITED:
       return list.filter((d) => d.visited);
-    case VisitFilter.NO:
+    case VisitFilter.NOT_VISITED:
       return list.filter((d) => !d.visited);
     default:
       return list;

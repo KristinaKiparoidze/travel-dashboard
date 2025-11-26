@@ -1,10 +1,10 @@
 export enum SortOrder {
-  ASC = "name-asc",
-  DESC = "name-desc",
+  NAME_ASC = "name-asc",
+  NAME_DESC = "name-desc",
 }
 
 export enum VisitFilter {
   ALL = "all",
-  YES = "yes",
-  NO = "no",
+  VISITED = "yes",
+  NOT_VISITED = "no",
 }

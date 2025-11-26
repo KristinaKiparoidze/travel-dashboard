@@ -1,36 +1,45 @@
 "use client";
 
 import { create } from "zustand";
-import { destinations as initialData } from "@/data/destinations";
+import { DESTINATIONS } from "@/data/destinations";
+import { fetchUnsplashImage } from "@/lib/unsplash";
 
 export type Destination = {
   id: number;
   name: string;
   country: string;
   visited: boolean;
-  image: string;
+  image?: string | null;
   description?: string;
 };
 
 type DestinationsState = {
   destinations: Destination[];
-  filterVisited: "all" | "yes" | "no";
   setDestinations: (d: Destination[]) => void;
-  setFilterVisited: (v: "all" | "yes" | "no") => void;
   toggleVisited: (id: number) => void;
   visitedCount: () => number;
+  loadDestinationsWithImages: () => Promise<void>;
 };
 
 export const useTravelStore = create<DestinationsState>((set, get) => ({
-  destinations: initialData,
+  destinations: [],
   filterVisited: "all",
   setDestinations: (d) => set({ destinations: d }),
-  setFilterVisited: (v) => set({ filterVisited: v }),
   toggleVisited: (id: number) =>
-    set({
-      destinations: get().destinations.map((dest) =>
+    set((state) => ({
+      destinations: state.destinations.map((dest) =>
         dest.id === id ? { ...dest, visited: !dest.visited } : dest
       ),
-    }),
+    })),
   visitedCount: () => get().destinations.filter((d) => d.visited).length,
+  loadDestinationsWithImages: async () => {
+    const destinationsWithImages = await Promise.all(
+      DESTINATIONS.map(async (d) => ({
+        ...d,
+        visited: false,
+        image: await fetchUnsplashImage(d.name),
+      }))
+    );
+    set({ destinations: destinationsWithImages });
+  },
 }));
