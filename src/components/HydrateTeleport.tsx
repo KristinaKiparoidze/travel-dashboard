@@ -11,13 +11,17 @@ import { SortOrder, VisitFilter } from "@/lib/constants";
 
 export default function HydrateTeleport({ initial }: { initial: any[] }) {
   const { destinations, setDestinations, toggleVisited } = useTravelStore();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (Array.isArray(initial)) {
       setDestinations(initial);
+      // Artificial delay to showcase loading skeleton UX (remove in production)
+      setTimeout(() => setIsLoading(false), 1000);
     } else {
       console.error("Initial data is not an array:", initial);
       setDestinations([]);
+      setIsLoading(false);
     }
   }, [initial, setDestinations]);
 
@@ -74,7 +78,11 @@ export default function HydrateTeleport({ initial }: { initial: any[] }) {
             </div>
           </div>
 
-          <DestinationList list={finalList} onToggle={toggleVisited} />
+          <DestinationList
+            list={finalList}
+            onToggle={toggleVisited}
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </main>
