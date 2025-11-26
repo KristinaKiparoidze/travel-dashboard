@@ -24,7 +24,6 @@ export default function AddDestinationModal({ isOpen, onClose, onAdd }: Props) {
     setIsLoading(true);
 
     try {
-      // Use existing Unsplash utility function
       const imageUrl = await fetchUnsplashImage(name.trim());
 
       onAdd({
@@ -33,7 +32,6 @@ export default function AddDestinationModal({ isOpen, onClose, onAdd }: Props) {
         image: imageUrl,
       });
 
-      // Reset form
       setName("");
       setCountry("");
       onClose();
@@ -51,7 +49,6 @@ export default function AddDestinationModal({ isOpen, onClose, onAdd }: Props) {
     onClose();
   };
 
-  // Close modal on backdrop click
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       handleClose();
@@ -171,8 +168,7 @@ export default function AddDestinationModal({ isOpen, onClose, onAdd }: Props) {
         </form>
 
         <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-          * Image will be auto-fetched from Unsplash • Changes reset on page
-          reload
+          Images auto-fetched from Unsplash • Data persists in localStorage
         </p>
       </div>
     </div>
