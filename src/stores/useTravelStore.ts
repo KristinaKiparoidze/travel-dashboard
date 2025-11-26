@@ -19,6 +19,7 @@ type DestinationsState = {
   toggleVisited: (id: number) => void;
   visitedCount: () => number;
   loadDestinationsWithImages: () => Promise<void>;
+  addDestination: (destination: Omit<Destination, "id" | "visited">) => void;
 };
 
 export const useTravelStore = create<DestinationsState>((set, get) => ({
@@ -42,4 +43,15 @@ export const useTravelStore = create<DestinationsState>((set, get) => ({
     );
     set({ destinations: destinationsWithImages });
   },
+  addDestination: (destination) =>
+    set((state) => ({
+      destinations: [
+        ...state.destinations,
+        {
+          ...destination,
+          id: Math.max(0, ...state.destinations.map((d) => d.id)) + 1,
+          visited: false,
+        },
+      ],
+    })),
 }));

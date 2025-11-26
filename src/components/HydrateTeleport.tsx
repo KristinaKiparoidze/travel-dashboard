@@ -7,11 +7,14 @@ import FiltersBar from "@/components/FiltersBar";
 import DestinationList from "@/components/DestinationList";
 import SearchBar from "@/components/SearchBar";
 import ThemeToggle from "@/components/ThemeToggle";
+import AddDestinationModal from "@/components/AddDestinationModal";
 import { SortOrder, VisitFilter } from "@/lib/constants";
 
 export default function HydrateTeleport({ initial }: { initial: any[] }) {
-  const { destinations, setDestinations, toggleVisited } = useTravelStore();
+  const { destinations, setDestinations, toggleVisited, addDestination } =
+    useTravelStore();
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (Array.isArray(initial)) {
@@ -62,7 +65,27 @@ export default function HydrateTeleport({ initial }: { initial: any[] }) {
                 Track your dream destinations • Powered by Unsplash & Zustand
               </p>
             </div>
-            <ThemeToggle />
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+                aria-label="Add new destination"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Add Destination
+              </button>
+              <ThemeToggle />
+            </div>
           </div>
 
           <StatsBar />
@@ -85,6 +108,12 @@ export default function HydrateTeleport({ initial }: { initial: any[] }) {
           />
         </div>
       </div>
+
+      <AddDestinationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={addDestination}
+      />
     </main>
   );
 }
